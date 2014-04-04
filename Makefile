@@ -14,6 +14,10 @@
 
 # territories without counties:
 # as fm gu mh mp pw um
+#
+
+#TOPOJSON=node_modules/.bin/topojson
+TOPOJSON=/usr/local/bin/topojson
 
 all:
 
@@ -618,7 +622,7 @@ png/%.png: shp/%.shp bin/rasterize
 
 topo/us-congress-10m-ungrouped.json: shp/us/congress-ungrouped.shp
 	mkdir -p $(dir $@)
-	node_modules/.bin/topojson \
+	$(TOPOJSON) \
 		-o $@ \
 		--no-pre-quantization \
 		--post-quantization=1e6 \
@@ -628,7 +632,7 @@ topo/us-congress-10m-ungrouped.json: shp/us/congress-ungrouped.shp
 
 topo/us-counties-10m-ungrouped.json: shp/us/counties.shp
 	mkdir -p $(dir $@)
-	node_modules/.bin/topojson \
+	$(TOPOJSON) \
 		-o $@ \
 		--no-pre-quantization \
 		--post-quantization=1e6 \
@@ -638,13 +642,13 @@ topo/us-counties-10m-ungrouped.json: shp/us/counties.shp
 
 # Group polygons into multipolygons.
 topo/us-%-10m.json: topo/us-%-10m-ungrouped.json
-	node_modules/.bin/topojson-group \
+	$(TOPOJSON)-group \
 		-o $@ \
 		-- topo/us-$*-10m-ungrouped.json
 
 # Merge counties into states.
 topo/us-states-10m.json: topo/us-counties-10m.json
-	node_modules/.bin/topojson-merge \
+	$(TOPOJSON)-merge \
 		-o $@ \
 		--in-object=counties \
 		--out-object=states \
@@ -653,7 +657,7 @@ topo/us-states-10m.json: topo/us-counties-10m.json
 
 # Merge states into the nation (land).
 topo/us-10m.json: topo/us-states-10m.json
-	node_modules/.bin/topojson-merge \
+	$(TOPOJSON)-merge \
 		-o $@ \
 		--in-object=states \
 		--out-object=land \
