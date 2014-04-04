@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+/* CSS goes here. */
+
+</style>
+<body>
+
+<script src="d3.v3.min.js"></script>
+<script src="topojson.v1.min.js"></script>
+
+<script>
+
+var width = 960,
+    height = 1160;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("topo/ma-counties.json", function(error, ma) {
+
+  console.log(ma);
+
+  var counties = topojson.feature(ma, ma.objects.counties);
+
+  var projection = d3.geo.albers()
+	  .center([2.5, 43])
+	  .scale(14000)
+	  .rotate([75,0])
+	  ;
+
+  var path = d3.geo.path()
+	.projection(projection);
+
+  svg.append("path")
+      .datum(counties)
+      .attr("d", path);
+  });
+
+</script>
