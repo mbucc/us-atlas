@@ -16,6 +16,14 @@
 # as fm gu mh mp pw um
 #
 
+# Note, with Homebrew:
+#
+# /usr/local/bin/topojson          ->  /usr/local/lib/node_modules/topojson/bin/topojson
+# /usr/local/bin/topojson-merge    ->  /usr/local/lib/node_modules/topojson/bin/topojson-merge
+# /usr/local/bin/topojson-geojson  ->  /usr/local/lib/node_modules/topojson/bin/topojson-geojson
+# /usr/local/bin/topojson-group    ->  /usr/local/lib/node_modules/topojson/bin/topojson-group
+# topojson@1.6.4 /usr/local/lib/node_modules/topojson
+#
 #TOPOJSON=node_modules/.bin/topojson
 TOPOJSON=/usr/local/bin/topojson
 
@@ -38,6 +46,13 @@ stop:
 %.js:
 	curl -L http://d3js.org/$@ > t
 	mv t $@
+
+topojson:
+	npm install -g topojson
+	@if [ "$$(which topojson)" != "$(TOPOJSON)" ]; then \
+		echo Change $(TOPOJSON) in Makefile to $$(which topojson); \
+		exit 1; \
+	fi
 
 
 #------------------------------------------------------------------------------
