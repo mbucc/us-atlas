@@ -19,6 +19,29 @@
 #TOPOJSON=node_modules/.bin/topojson
 TOPOJSON=/usr/local/bin/topojson
 
+#------------------------------------------------------------------------------
+
+# Create map of Massachusetts counties.
+topo/ma-counties.json: shp/ma/counties.shp
+	mkdir -p $(dir $@)
+	$(TOPOJSON) -o topo/ma-counties.json --q0=0 --q1=1e6 -s 7e-7 --id-property=+FIPS -- shp/ma/counties.shp
+
+start: stop d3.v3.min.js topojson.v1.min.js
+	python -m SimpleHTTPServer 8008 &
+
+stop:
+	ps | grep SimpleHTTPServer | grep -v grep | awk '{print $$1}' | xargs kill
+
+#d3.v3.min.js: http://d3js.org/d3.v3.min.js
+#topojson.v1.min.js: http://d3js.org/topojson.v1.min.js
+
+%.js:
+	curl -L http://d3js.org/$@ > t
+	mv t $@
+
+
+#------------------------------------------------------------------------------
+
 all:
 
 .SECONDARY:
