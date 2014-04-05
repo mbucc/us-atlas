@@ -6,3 +6,4 @@ topo
 node_modules
 *.js
 *.swp
+pretty.json

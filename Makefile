@@ -47,6 +47,13 @@ stop:
 	curl -L http://d3js.org/$@ > t
 	mv t $@
 
+pretty.json: topo/ma-counties.json
+	cat $? | python -mjson.tool > pretty.json
+
+clean:
+	rm -f pretty.json
+	rm -f topo/ma-counties.json
+
 topojson:
 	npm install -g topojson
 	@if [ "$$(which topojson)" != "$(TOPOJSON)" ]; then \
