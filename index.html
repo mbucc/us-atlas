@@ -4,21 +4,33 @@
 
     .county { fill: #ddc; stroke: #777;}
 
-    svg {border: solid; border-width: 2px;}
+    #wrap {
+        margin-left: 20%;
+        margin-top: 3em;
+        width:60%;
+    }
+
+    svg {
+	    border: solid; border-width: 2px;
+	    width = 100%;
+    }
 
 </style>
-<body>
 
 <script src="d3.v3.min.js"></script>
 <script src="topojson.v1.min.js"></script>
 
+<body>
+<div id=wrap><svg></svg></div>
+
 <script>
 
-var aspect_ratio = 1.6180,
-    height = 400,
-    width = height * aspect_ratio;
+var e = document.getElementById('wrap'),
+    width = e.offsetWidth,
+    aspect_ratio = 1.6180,
+    height = width / aspect_ratio;
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -41,13 +53,11 @@ d3.json("topo/ma-counties.json", function(error, ma) {
     .scale(s)
     .translate(t);
 
-  console.log(b);
-
   svg.selectAll(".county")
       .data(topojson.feature(ma, ma.objects.counties).features)
     .enter().append("path")
       .attr("class", function(d) {return "county " + d.id;})
       .attr("d", path);
-});
+	});
 
 </script>
