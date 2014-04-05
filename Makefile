@@ -32,7 +32,7 @@ TOPOJSON=/usr/local/bin/topojson
 # Create map of Massachusetts counties.
 topo/ma-counties.json: shp/ma/counties.shp
 	mkdir -p $(dir $@)
-	$(TOPOJSON) -o topo/ma-counties.json -q 1e6 -s 7e-9 --id-property=+FIPS -- shp/ma/counties.shp
+	$(TOPOJSON) -o topo/ma-counties.json -q 1e6 -s 2e-10 --id-property=+FIPS -- shp/ma/counties.shp
 
 start: stop d3.v3.min.js topojson.v1.min.js topo/ma-counties.json
 	python -m SimpleHTTPServer 8008 &
