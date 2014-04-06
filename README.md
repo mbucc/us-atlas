@@ -1,3 +1,11 @@
+----------------------------------------------------
+Weekend hack to build a county map of Massacusetts.
+
+    $ make clean start
+
+then open http://127.0.0.1:8008.
+--------------------------------------------------
+
 # U.S. Atlas TopoJSON
 
 This repository provides a convenient mechanism for generating TopoJSON files from the [National Atlas](http://nationalatlas.gov/) one million-scale dataset and [U.S. Census Bureau](http://www.census.gov/geo/maps-data/data/tiger-line.html) shapefiles.
