@@ -1,5 +1,5 @@
 ----------------------------------------------------
-Weekend hack to build a county map of Massacusetts.
+Weekend hack to suild a county map of Massachusetts.
 
     $ make clean start
 
