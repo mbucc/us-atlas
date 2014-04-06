@@ -1,13 +1,26 @@
-----------------------------------------------------
-Weekend hack to suild a county map of Massachusetts.
+----------------------------------------------------------------------
+Hack to build a county map of Massachusetts from us-atlas.
+
+Dependencies:
+
+  * Python
+  * us-atlas dependencies (see below)
+
+Once that's out of the way, type
 
     $ make clean start
 
-then open http://127.0.0.1:8008.
+to start a SimpleHTTPServer listening to 127.0.0.1:8008.  (You may
+need to change TOPOJSON variable in Makefile.)
+
+To shutdown the server (more precisely any running SimpleHTTPServers),
+type
+
+    $ make stop
 
 -- mbucc, Sun Apr  6 09:07:42 EDT 2014
 
---------------------------------------------------
+----------------------------------------------------------------------
 
 # U.S. Atlas TopoJSON
 
