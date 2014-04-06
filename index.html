@@ -29,8 +29,6 @@ var ma;
 
 var render_map = function() {
 
-  console.log("render_map");
-
   var e = document.getElementById('wrap'),
       width = e.offsetWidth,
       aspect_ratio = 1.6180,
@@ -43,8 +41,6 @@ var render_map = function() {
       .attr("width", width)
       .attr("height", height);
   
-  svg.selectAll("county").data([]).exit().remove();
-
   var projection = d3.geo.albers()
       .scale(1)
       .rotate([75,0])
