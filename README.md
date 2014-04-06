@@ -13,8 +13,8 @@ Once that's out of the way, type
 to start a SimpleHTTPServer listening to 127.0.0.1:8008.  (You may
 need to change TOPOJSON variable in Makefile.)
 
-To shutdown the server (more precisely any running SimpleHTTPServers),
-type
+To shutdown the server (more precisely, shutdown any running
+SimpleHTTPServers), type
 
     $ make stop
 
