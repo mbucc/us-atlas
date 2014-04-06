@@ -21,29 +21,38 @@
 <script src="topojson.v1.min.js"></script>
 
 <body>
-<div id=wrap><svg></svg></div>
+<div id=wrap></div>
 
 <script>
 
-var e = document.getElementById('wrap'),
-    width = e.offsetWidth,
-    aspect_ratio = 1.6180,
-    height = width / aspect_ratio;
+var ma;
 
-var svg = d3.select("svg")
-    .attr("width", width)
-    .attr("height", height);
+var render_map = function() {
 
-var projection = d3.geo.albers()
-    .scale(1)
-    .rotate([75,0])
-    .translate([0,0]);
+  console.log("render_map");
 
-var path = d3.geo.path()
-    .projection(projection);
+  var e = document.getElementById('wrap'),
+      width = e.offsetWidth,
+      aspect_ratio = 1.6180,
+      height = width / aspect_ratio;
+  
+  if (d3.select("svg"))
+    d3.select("svg").remove();
 
-d3.json("topo/ma-counties.json", function(error, ma) {
+  var svg = d3.select("#wrap").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+  
+  svg.selectAll("county").data([]).exit().remove();
 
+  var projection = d3.geo.albers()
+      .scale(1)
+      .rotate([75,0])
+      .translate([0,0]);
+  
+  var path = d3.geo.path()
+      .projection(projection);
+  
   // http://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
   var b = path.bounds(topojson.feature(ma, ma.objects.counties)),
       s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
@@ -58,6 +67,15 @@ d3.json("topo/ma-counties.json", function(error, ma) {
     .enter().append("path")
       .attr("class", function(d) {return "county " + d.id;})
       .attr("d", path);
-	});
+};
+
+d3.json("topo/ma-counties.json", function(error, data) { ma = data; render_map() });
+
+// XXX: Limit scope of state variables "t" and "ma" (above) to a closure.
+var t;
+window.onresize = function(event) {
+	clearTimeout(t);
+	t = setTimeout(render_map, 1000);
+};
 
 </script>
