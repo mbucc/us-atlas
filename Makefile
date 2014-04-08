@@ -30,18 +30,31 @@ TOPOJSON=/usr/local/bin/topojson
 #------------------------------------------------------------------------------
 
 # Create map of Massachusetts counties.
-topo/ma-counties.json: shp/ma/counties.shp
+topo/ma-counties.json: shp/ma/counties.shp ma-FIPS_to_NAICS00.tsv
 	mkdir -p $(dir $@)
-	$(TOPOJSON) -o topo/ma-counties.json -q 1e6 -s 2e-10 --id-property=+FIPS -- shp/ma/counties.shp
+	$(TOPOJSON) -o $@ -e ma-FIPS_to_NAICS00.tsv --id-property=+FIPS -p smallbiz=+smallbiz -q 1e6 -s 2e-10 -- shp/ma/counties.shp
 
-start: stop d3.v3.min.js topojson.v1.min.js topo/ma-counties.json
+# Input:
+#     county_to_FIPS.tsv : <county_name> <tab> <FIPS>
+#     county_to_NAICS.tsv: <county_name> <tab> <small-businesses_n>
+# Output:
+#     FIPS_to_NAICS.tsv  : <FIPS> <tab> <small-businesses_n>
+
+ma-FIPS_to_NAICS00.tsv: ma-county_to_FIPS.tsv ma-county_to_NAICS00.tsv
+	printf "FIPS\tsmallbiz\n" > t
+	join $? \
+		| grep -v "^#" \
+		| awk '{print $$2,$$3}' \
+		| tr -d , \
+		| tr ' ' '\t' \
+		>> t
+	mv t $@
+
+start: stop d3.v3.min.js topojson.v1.min.js topo/ma-counties.json colorbrewer.v1.min.js
 	python -m SimpleHTTPServer 8008 &
 
 stop:
 	ps | grep SimpleHTTPServer | grep -v grep | awk '{print $$1}' | xargs kill
-
-#d3.v3.min.js: http://d3js.org/d3.v3.min.js
-#topojson.v1.min.js: http://d3js.org/topojson.v1.min.js
 
 %.js:
 	curl -L http://d3js.org/$@ > t
@@ -53,6 +66,7 @@ pretty.json: topo/ma-counties.json
 clean:
 	rm -f pretty.json
 	rm -f topo/ma-counties.json
+	rm -f ma-FIPS_to_NAICS00.tsv
 
 topojson:
 	npm install -g topojson

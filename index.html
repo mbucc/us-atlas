@@ -19,6 +19,7 @@
 
 <script src="d3.v3.min.js"></script>
 <script src="topojson.v1.min.js"></script>
+<script src="colorbrewer.v1.min.js"></script>
 
 <body>
 <div id=wrap></div>
@@ -27,6 +28,17 @@
 
 var ma;
 
+var fill = d3.scale.quantize()
+  .domain([1000, 120000])
+  .range(colorbrewer.Greens[7]);
+
+var tooltip = function(d) {
+  var n = d.properties.smallbiz.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  var s =  n + " small businesses in 2009";
+  console.log(s);
+  return s;
+}
+
 var render_map = function() {
 
   var e = document.getElementById('wrap'),
@@ -34,6 +46,7 @@ var render_map = function() {
       aspect_ratio = 1.6180,
       height = width / aspect_ratio;
   
+  // XXX: Better resize? http://eyeseast.github.io/visible-data/2013/08/26/responsive-d3/
   if (d3.select("svg"))
     d3.select("svg").remove();
 
@@ -62,7 +75,10 @@ var render_map = function() {
       .data(topojson.feature(ma, ma.objects.counties).features)
     .enter().append("path")
       .attr("class", function(d) {return "county " + d.id;})
-      .attr("d", path);
+      .attr("d", path)
+      .style("fill", function(d) { return fill(0 + d.properties.smallbiz); })
+      .append("svg:title")
+        .text(function (d) { return tooltip(d)});
 };
 
 d3.json("topo/ma-counties.json", function(error, data) { ma = data; render_map() });
