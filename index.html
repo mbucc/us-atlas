@@ -35,7 +35,6 @@ var fill = d3.scale.quantize()
 var tooltip = function(d) {
   var n = d.properties.smallbiz.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   var s =  n + " small businesses in 2009";
-  console.log(s);
   return s;
 }
 
