@@ -56,19 +56,18 @@ This repository provides a convenient mechanism for generating TopoJSON files fr
 
 ## Installing via Homebrew
 
-Before you can run `make`, you’ll need to install Node.js. Here’s how to do that using [Homebrew](http://mxcl.github.com/homebrew/) on Mac OS X:
+Before you can make any TopoJSON files, you’ll need to install Node.js and GDAL. Here’s how to do that using [Homebrew](http://mxcl.github.com/homebrew/) on Mac OS X:
 
 ```bash
-brew install node
+brew install node gdal
 ```
 
-And then, clone this repository, install its dependencies and run `make`:
+Then, clone this repository and install its dependencies:
 
 ```bash
 git clone https://github.com/mbostock/us-atlas.git
 cd us-atlas
 npm install
-make
 ```
 
 If the installation of [node-canvas](https://github.com/learnboost/node-canvas) fails for you, try
@@ -85,16 +84,16 @@ export PKG_CONFIG_PATH="/opt/X11/lib/pkgconfig"
 
 If you want to install this software using an alternate method see the website for [TopoJSON](https://github.com/mbostock/topojson). I also recommend reading my tutorial, [Let’s Make a Map](http://bost.ocks.org/mike/map/).
 
-## Generating TopoJSON
+## Make Targets
 
-Once you have everything installed, simply run:
+Once you have everything installed, you can make various targets defined in the Makefile.
 
-```
-make
-```
+<b>topo/us-10m.json</b>
 
-This will generate a large number of TopoJSON files of varying size in the `topo` directory. As a by-product of producing these files, you’ll also download shapefiles directly from the National Atlas or the Census Bureau.
+The U.S. county, state and nation boundaries simplified at 1:10,000,000 scale.
 
-`make` and `make all` generate TopoJSON files for the boundaries of the United States. In addition, you can run `make topo/us-streams.json` and `make topo/us-roads.json` to generate TopoJSON for streams and roads. These aren't made by default because of their size. `us-streams.json` requires a 180M download and 4.5GB of memory to generate.
+<b>topo/us-congress-10m.json</b>
 
-If you want to generate a custom map, I recommend modifying the Makefile. Or, just use the Makefile as a set of examples, and run the appropriate `ogr2ogr` and `topojson` commands from the terminal.
+The districts of the 113th U.S. Congress simplified at 1:10,000,000 scale.
+
+There are partial targets defined for a large number of other boundary areas and geographic features. However, you’ll have to figure these out on your own for now. Sorry!
