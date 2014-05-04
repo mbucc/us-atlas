@@ -76,6 +76,24 @@ topojson:
 	fi
 
 
+# Massachusetts county population.
+dat/ma/county.csv: gz/ma2010.dp.zip county.awk
+	mkdir -p $(dir $@)
+	rm -f $@
+	unzip -p gz/ma2010.dp.zip | awk -f county.awk > t
+	mv t $@
+
+gz/ma2010.dp.zip:
+	mkdir -p $(dir $@)
+	curl 'http://www2.census.gov/census_2010/03-Demographic_Profile/Massachusetts/$(notdir $@)' -o $@.download
+	mv $@.download $@
+
+docs: doc/demographic-profile.pdf
+
+doc/demographic-profile.pdf:
+	mkdir -p $(dir $@)
+	curl 'http://www.census.gov/prod/cen2010/doc/dpsf.pdf' -o $@
+
 #------------------------------------------------------------------------------
 
 all:
